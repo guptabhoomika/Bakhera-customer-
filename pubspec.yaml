@@ -30,6 +30,8 @@ dependencies:
   firebase_core: 
   firebase_auth:   
   google_fonts: 
+  carousel_slider:
+  curved_navigation_bar:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -52,8 +54,44 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/images/logo.png
-    - lib/assets/images/hotel.png
+    - assets/fk-plus_043837.png
+    - assets/logo.png
+    - assets/powered_by.png
+    - assets/flutter1.png
+    - assets/flutter2.png
+    - assets/applinces.png
+    - assets/beauty.png
+    - assets/electronic.png
+    - assets/fashion.png
+    - assets/grocery.png
+    - assets/mobiles.png
+    - assets/sports_and_more.png
+    - assets/toys_and_babby.png
+    - assets/home.png
+    - assets/hair_dryer.png
+    - assets/laptop.png
+    - assets/power_bank.png
+    - assets/male_modle.png
+    - assets/shirt_modle.png
+    - assets/female.png
+    - assets/watch.png
+    - assets/banner_one.png
+    - assets/phone_two.png
+    - assets/phone_three.png
+    - assets/phone.png
+    - assets/nokia.png
+    - assets/banner_two.png
+    - assets/banner_three.png
+    - assets/mobile_top.png
+    - assets/telivision.png
+    - assets/running.png
+    - assets/foood.jpg
+    - assets/manpower.png
+    - assets/giftss.jpg
+    - assets/dryclean.jpg
+    - assets/cafe.png
+    - assets/fruitsveg.jpg
+    - assets/hotel.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
