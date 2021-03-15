@@ -1,3 +1,5 @@
+import 'package:Service/src/ui/cartpg.dart';
+
 import '../ui/enquire.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +7,8 @@ import 'ProdList.dart';
 
 class StorePg extends StatefulWidget {
   final String title;
-  StorePg({this.title});
+  final String img;
+  StorePg({this.title, this.img});
   @override
   _StorePgState createState() => _StorePgState();
 }
@@ -14,6 +17,7 @@ class _StorePgState extends State<StorePg> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         title: Text(
@@ -21,11 +25,17 @@ class _StorePgState extends State<StorePg> {
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Icon(
-              Icons.shopping_cart,
-              size: 20,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => CartPg()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Icon(
+                Icons.shopping_cart,
+                size: 20,
+              ),
             ),
           )
         ],
@@ -83,15 +93,14 @@ class _StorePgState extends State<StorePg> {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       fit: BoxFit.fitWidth,
-                                      image: NetworkImage(
-                                          "https://images.jdmagicbox.com/comp/bareilly/g1/9999px581.x581.181225203715.s8g1/catalogue/kipps-super-market-bareilly-supermarkets-0xh3qmy1vf.jpg")))),
+                                      image: NetworkImage(widget.img)))),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               //crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("KIPPS MARKET",
+                                Text(widget.title.toUpperCase(),
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
                                 SizedBox(

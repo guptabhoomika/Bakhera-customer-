@@ -1,4 +1,5 @@
 import 'package:Service/src/ui/dryclean.dart';
+import 'package:Service/src/ui/manpower.dart';
 
 import '../cafe.dart';
 
@@ -34,6 +35,9 @@ class _ThirdlistState extends State<Thirdlist> {
               } else if (title == "Cafe Booking") {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Cafe()));
+              } else {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ManPower()));
               }
             },
             child: Container(

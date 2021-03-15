@@ -11,6 +11,7 @@ class _CafeState extends State<Cafe> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         title: Text(

@@ -1,5 +1,5 @@
 import '../ui/prod_det.dart';
-import '../ui/vendor.dart';
+
 import 'package:flutter/material.dart';
 
 class ProdList extends StatefulWidget {
@@ -15,6 +15,7 @@ class _ProdListState extends State<ProdList> {
     "https://images-na.ssl-images-amazon.com/images/I/51R6OxZA-KL._SY450_.jpg",
     "https://images-na.ssl-images-amazon.com/images/I/61L1thSI95L._SL1000_.jpg"
   ];
+  var quan = ["50 g", "1 kg", "1 kg", "1 kg", "500 g"];
 
   buildItem(BuildContext context, int index, String title, int price) {
     return Padding(
@@ -29,6 +30,7 @@ class _ProdListState extends State<ProdList> {
                       builder: (context) => ProdDet(
                             title: title,
                             url: name[index],
+                            quan: quan[index],
                           )));
             },
             child: Container(

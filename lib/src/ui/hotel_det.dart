@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-final String image =
-    "https://r1imghtlak.mmtcdn.com/003b6bae844511e993e80242ac110002.jpg";
+class HotelDet extends StatefulWidget {
+  final String name;
+  final String img;
+  final double rate;
+  final String price;
+  final String loc;
+  HotelDet({this.img, this.name, this.price, this.rate, this.loc});
 
-class HotelDet extends StatelessWidget {
+  @override
+  _HotelDetState createState() => _HotelDetState();
+}
+
+class _HotelDetState extends State<HotelDet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
           Container(
               foregroundDecoration: BoxDecoration(color: Colors.black26),
               height: 400,
-              child: Image.network(image, fit: BoxFit.cover)),
+              child: Image.network(widget.img, fit: BoxFit.cover)),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 16.0, bottom: 20.0),
             child: Column(
@@ -22,7 +33,7 @@ class HotelDet extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
-                    "Holiday Inn\nGoa",
+                    widget.name + "\n" + widget.loc,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 28.0,
@@ -66,29 +77,17 @@ class HotelDet extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.purple,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.purple,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.purple,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.purple,
-                                    ),
-                                    Icon(
-                                      Icons.star_border,
-                                      color: Colors.purple,
-                                    ),
-                                  ],
+                                RatingBarIndicator(
+                                  rating: widget.rate,
+                                  itemBuilder: (context, index) => Icon(
+                                    Icons.star_purple500_outlined,
+                                    size: 5,
+                                    color: Colors.grey,
+                                  ),
+                                  itemCount: 5,
+                                  itemSize: 15.0,
+                                  unratedColor: Colors.white,
+                                  direction: Axis.horizontal,
                                 ),
                                 Text.rich(
                                   TextSpan(children: [
@@ -109,7 +108,7 @@ class HotelDet extends StatelessWidget {
                           Column(
                             children: <Widget>[
                               Text(
-                                "₹ 3200",
+                                "₹ " + widget.price,
                                 style: TextStyle(
                                     color: Colors.purple,
                                     fontWeight: FontWeight.bold,

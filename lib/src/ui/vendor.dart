@@ -1,3 +1,5 @@
+import 'package:Service/src/ui/cartpg.dart';
+
 import '../ui/storepg.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,7 @@ class _VendorListState extends State<VendorList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         title: Text(
@@ -23,11 +26,17 @@ class _VendorListState extends State<VendorList> {
             Icons.location_on,
             size: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Icon(
-              Icons.shopping_cart,
-              size: 20,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => CartPg()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Icon(
+                Icons.shopping_cart,
+                size: 20,
+              ),
             ),
           )
         ],
@@ -68,102 +77,65 @@ class _VendorListState extends State<VendorList> {
             SizedBox(
               height: 5,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => StorePg(
-                                title: "Kipps Market",
-                              )));
-                },
-                child: Card(
-                  elevation: 3.0,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height / 5,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                            width: 150,
-                            height: 150,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fitWidth,
-                                    image: NetworkImage(
-                                        "https://images-na.ssl-images-amazon.com/images/I/41ZF-V-a3YL._SX466_.jpg")))),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            //crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("KIPPS MARKET",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(Icons.timer),
-                                  Text("Open Now"),
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-              child: Card(
-                elevation: 3.0,
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            storetile("Kipps Market",
+                "https://images-na.ssl-images-amazon.com/images/I/41ZF-V-a3YL._SX466_.jpg"),
+            storetile("Easy Day",
+                "https://lh3.googleusercontent.com/VCeEsWH2st1yXGFPM3Rj0dmPC3FE4-JwvCRM6hg-o-pBq3GeU0WbUhAYYjsl-CIx1MiqNFbFQTBqzpZn4r32F4uxQXo=w256")
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget storetile(String name, String img) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StorePg(
+                        title: name,
+                        img: img,
+                      )));
+        },
+        child: Card(
+          elevation: 3.0,
+          child: Container(
+            height: MediaQuery.of(context).size.height / 5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fitWidth, image: NetworkImage(img)))),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    //crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.fitWidth,
-                                  image: NetworkImage(
-                                      "https://lh3.googleusercontent.com/VCeEsWH2st1yXGFPM3Rj0dmPC3FE4-JwvCRM6hg-o-pBq3GeU0WbUhAYYjsl-CIx1MiqNFbFQTBqzpZn4r32F4uxQXo=w256")))),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          //crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("EASY DAY",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.timer),
-                                Text("Open Now"),
-                              ],
-                            )
-                          ],
-                        ),
+                      Text(name.toUpperCase(),
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 2,
                       ),
+                      Row(
+                        children: [
+                          Icon(Icons.timer),
+                          Text("Open Now"),
+                        ],
+                      )
                     ],
                   ),
-                ),
-              ),
+                )
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

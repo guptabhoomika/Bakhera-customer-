@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class ProdDet extends StatefulWidget {
   final String title;
   final String url;
-  ProdDet({this.title, this.url});
+  final String quan;
+  ProdDet({this.title, this.url, this.quan});
   @override
   _ProdDetState createState() => _ProdDetState();
 }
@@ -41,11 +42,11 @@ class _ProdDetState extends State<ProdDet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Nescafe Coffee",
+                  widget.title,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "50 g",
+                  widget.quan,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

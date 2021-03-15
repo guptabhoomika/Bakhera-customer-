@@ -1,12 +1,11 @@
-import '../ui/dryclean_det.dart';
 import 'package:flutter/material.dart';
 
-class DryClean extends StatefulWidget {
+class ManPower extends StatefulWidget {
   @override
-  _DryCleanState createState() => _DryCleanState();
+  _ManPowerState createState() => _ManPowerState();
 }
 
-class _DryCleanState extends State<DryClean> {
+class _ManPowerState extends State<ManPower> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,17 +13,24 @@ class _DryCleanState extends State<DryClean> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          "Dry Cleaning",
+          "Man Power",
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Icon(
-              Icons.location_on,
-              size: 20,
-            ),
+          Icon(
+            Icons.location_on,
+            size: 20,
           ),
+          GestureDetector(
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Icon(
+                Icons.shopping_cart,
+                size: 20,
+              ),
+            ),
+          )
         ],
       ),
       body: SafeArea(
@@ -50,7 +56,7 @@ class _DryCleanState extends State<DryClean> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            'Search for Dry Cleaning Services',
+                            'Search for Services',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),
@@ -60,35 +66,24 @@ class _DryCleanState extends State<DryClean> {
                 ),
               ),
             ),
-
             SizedBox(
               height: 5,
             ),
-            drycleantile("Smart Wash",
-                "https://content3.jdmagicbox.com/comp/bareilly/b2/9999px581.x581.181012064959.e9b2/catalogue/smart-wash-laundry-service-bareilly-mcwltmayre.jpg?clr=2b3b3b"),
-            drycleantile("Dhobi Ghaat",
-                "https://content3.jdmagicbox.com/comp/def_content/cleaning-services/shutterstock-128998688-cleaning-services-2-t71zi-250.jpg"),
-
-            //Fifthlist(),
+            tile("Plumber",
+                "https://img.favpng.com/23/3/13/plumber-plumbing-hvac-drain-central-heating-png-favpng-A5UAd3NAL1HtdutqyLFqqJbKC_t.jpg"),
+            tile("Electrician",
+                "https://img.pngio.com/electrician-electricity-engineer-transparent-png-image-electrician-png-900_900.png")
           ],
         ),
       ),
     );
   }
 
-  Widget drycleantile(String name, String img) {
+  Widget tile(String name, String img) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DryCleanDet(
-                        title: name,
-                        img: img,
-                      )));
-        },
+        onTap: () {},
         child: Card(
           elevation: 3.0,
           child: Container(
@@ -98,10 +93,10 @@ class _DryCleanState extends State<DryClean> {
               children: [
                 Container(
                     width: 150,
-                    height: 150,
+                    height: 100,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            fit: BoxFit.fitWidth, image: NetworkImage(img)))),
+                            fit: BoxFit.fitHeight, image: NetworkImage(img)))),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -116,7 +111,7 @@ class _DryCleanState extends State<DryClean> {
                       Row(
                         children: [
                           Icon(Icons.timer),
-                          Text("Open Now"),
+                          Text("Available Now"),
                         ],
                       )
                     ],
