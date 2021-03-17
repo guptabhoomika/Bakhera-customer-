@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import './hotel_det.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HotelList extends StatefulWidget {
   @override
@@ -64,20 +65,60 @@ class _HotelListState extends State<HotelList> {
             SizedBox(
               height: 5,
             ),
-            hoteltile("Holiday Inn", 4.5, "Goa", "3200",
-                "https://media-cdn.tripadvisor.com/media/photo-s/16/3c/02/21/photo3jpg.jpg"),
-            hoteltile("ITC Grand", 4, "Goa", "4000",
-                "https://r1imghtlak.mmtcdn.com/762e77a427ef11ea80020242ac110004.png?&output-quality=75&downsize=520:350&crop=520:350;2,0&output-format=jpg"),
-            hoteltile("Sarovar Portico", 5, "Goa", "5000",
-                "https://r1imghtlak.mmtcdn.com/f95e972a48c011ea9ce50242ac110003.jpg?&output-quality=75&downsize=520:350&crop=520:350;0,20&output-format=jpg")
+            StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection("hotels").snapshots(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.40,
+                        ),
+                        CircularProgressIndicator()
+                      ],
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      // physics: NeverScrollablePhysics(),
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot hotel = snapshot.data.docs[index];
+
+                        // print(names);
+
+                        return hoteltile(
+                            hotel["name"],
+                            4,
+                            hotel["city"],
+                            hotel["price"],
+                            hotel["hotel_img_url"],
+                            hotel["about"],
+                            hotel.id);
+                      },
+                    );
+                  }
+                }),
+
+            // hoteltile("Holiday Inn", 4.5, "Goa", "3200",
+            //     "https://media-cdn.tripadvisor.com/media/photo-s/16/3c/02/21/photo3jpg.jpg"),
+            // hoteltile("ITC Grand", 4, "Goa", "4000",
+            //     "https://r1imghtlak.mmtcdn.com/762e77a427ef11ea80020242ac110004.png?&output-quality=75&downsize=520:350&crop=520:350;2,0&output-format=jpg"),
+            // hoteltile("Sarovar Portico", 5, "Goa", "5000",
+            //     "https://r1imghtlak.mmtcdn.com/f95e972a48c011ea9ce50242ac110003.jpg?&output-quality=75&downsize=520:350&crop=520:350;0,20&output-format=jpg")
           ],
         ),
       ),
     );
   }
 
-  Widget hoteltile(
-      String name, double rate, String loc, String price, String img) {
+  Widget hoteltile(String name, double rate, String loc, String price,
+      String img, String abt, String id) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: GestureDetector(
@@ -91,6 +132,7 @@ class _HotelListState extends State<HotelList> {
                         img: img,
                         rate: rate,
                         loc: loc,
+                        hotelid: id,
                       )));
         },
         child: ClipRRect(

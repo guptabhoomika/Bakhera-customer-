@@ -1,5 +1,6 @@
 import '../ui/dryclean_det.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DryClean extends StatefulWidget {
   @override
@@ -64,10 +65,32 @@ class _DryCleanState extends State<DryClean> {
             SizedBox(
               height: 5,
             ),
-            drycleantile("Smart Wash",
-                "https://content3.jdmagicbox.com/comp/bareilly/b2/9999px581.x581.181012064959.e9b2/catalogue/smart-wash-laundry-service-bareilly-mcwltmayre.jpg?clr=2b3b3b"),
-            drycleantile("Dhobi Ghaat",
-                "https://content3.jdmagicbox.com/comp/def_content/cleaning-services/shutterstock-128998688-cleaning-services-2-t71zi-250.jpg"),
+            Container(
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("drycleanservice")
+                      .snapshots(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        // physics: NeverScrollablePhysics(),
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot hotel = snapshot.data.docs[index];
+                          return drycleantile(
+                              hotel["name"], hotel["Img"], hotel["time"]);
+                        },
+                      );
+                    }
+                  }),
+            ),
 
             //Fifthlist(),
           ],
@@ -76,7 +99,7 @@ class _DryCleanState extends State<DryClean> {
     );
   }
 
-  Widget drycleantile(String name, String img) {
+  Widget drycleantile(String name, String img, String time) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -87,6 +110,7 @@ class _DryCleanState extends State<DryClean> {
                   builder: (context) => DryCleanDet(
                         title: name,
                         img: img,
+                        time: time,
                       )));
         },
         child: Card(
@@ -116,7 +140,7 @@ class _DryCleanState extends State<DryClean> {
                       Row(
                         children: [
                           Icon(Icons.timer),
-                          Text("Open Now"),
+                          Text(time),
                         ],
                       )
                     ],

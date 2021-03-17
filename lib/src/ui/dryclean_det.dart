@@ -7,7 +7,8 @@ import 'ProdList.dart';
 class DryCleanDet extends StatefulWidget {
   final String title;
   final String img;
-  DryCleanDet({this.title, this.img});
+  final String time;
+  DryCleanDet({this.title, this.img, this.time});
   @override
   _DryCleanDetState createState() => _DryCleanDetState();
 }

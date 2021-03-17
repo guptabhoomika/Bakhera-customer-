@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HotelDet extends StatefulWidget {
   final String name;
@@ -7,13 +8,36 @@ class HotelDet extends StatefulWidget {
   final double rate;
   final String price;
   final String loc;
-  HotelDet({this.img, this.name, this.price, this.rate, this.loc});
+  final String hotelid;
+  HotelDet(
+      {this.img, this.name, this.price, this.rate, this.loc, this.hotelid});
 
   @override
   _HotelDetState createState() => _HotelDetState();
 }
 
+List<String> facilities;
+
 class _HotelDetState extends State<HotelDet> {
+  void getdata() async {
+    FirebaseFirestore.instance
+        .collection("hotels")
+        .doc(widget.hotelid)
+        .collection("facilities")
+        .get()
+        .then((value) => {
+              print(value.docs.length),
+            });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    print(widget.hotelid);
+    getdata();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
