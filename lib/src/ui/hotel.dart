@@ -133,6 +133,7 @@ class _HotelListState extends State<HotelList> {
                         rate: rate,
                         loc: loc,
                         hotelid: id,
+                        abt: abt,
                       )));
         },
         child: ClipRRect(

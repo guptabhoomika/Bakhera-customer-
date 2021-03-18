@@ -9,32 +9,27 @@ class HotelDet extends StatefulWidget {
   final String price;
   final String loc;
   final String hotelid;
+  final String abt;
   HotelDet(
-      {this.img, this.name, this.price, this.rate, this.loc, this.hotelid});
+      {this.img,
+      this.name,
+      this.price,
+      this.rate,
+      this.loc,
+      this.hotelid,
+      this.abt});
 
   @override
   _HotelDetState createState() => _HotelDetState();
 }
 
-List<String> facilities;
-
 class _HotelDetState extends State<HotelDet> {
-  void getdata() async {
-    FirebaseFirestore.instance
-        .collection("hotels")
-        .doc(widget.hotelid)
-        .collection("facilities")
-        .get()
-        .then((value) => {
-              print(value.docs.length),
-            });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     print(widget.hotelid);
-    getdata();
+    print(widget.abt);
+
     super.initState();
   }
 
@@ -196,395 +191,282 @@ class _HotelDetState extends State<HotelDet> {
   Widget _tabSection(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            child: TabBar(
-                isScrollable: true,
-                indicatorColor: Colors.purple,
-                labelColor: Colors.purple,
-                tabs: [
-                  Tab(text: "About"),
-                  Tab(text: "Rooms"),
-                  Tab(text: "Facilities"),
-                  Tab(text: "Reviews"),
-                ]),
-          ),
-          Container(
-            //Add this to give height
-            height: MediaQuery.of(context).size.height,
-            child: TabBarView(children: [
-              Column(
-                children: [
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione architecto autem quasi nisi iusto eius ex dolorum velit! Atque, veniam! Atque incidunt laudantium eveniet sint quod harum facere numquam molestias?",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w300, fontSize: 14.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione architecto autem quasi nisi iusto eius ex dolorum velit! Atque, veniam! Atque incidunt laudantium eveniet sint quod harum facere numquam molestias?",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w300, fontSize: 14.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione architecto autem quasi nisi iusto eius ex dolorum velit! Atque, veniam! Atque incidunt laudantium eveniet sint quod harum facere numquam molestias?",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w300, fontSize: 14.0),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Card(
-                    elevation: 3.0,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 3,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Container(
-                                  width: 160,
-                                  height: 160,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          fit: BoxFit.fitWidth,
-                                          image: NetworkImage(
-                                              "https://r1imghtlak.mmtcdn.com/003b6bae844511e993e80242ac110002.jpg")))),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, right: 8, top: 8),
-                                child: Column(
-                                  //crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("King Room",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text("₹ 3200"),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              color: Colors.purple,
-                              textColor: Colors.white,
-                              child: Text(
-                                "Select",
-                                style: TextStyle(fontWeight: FontWeight.normal),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16.0,
-                                horizontal: 32.0,
-                              ),
-                              onPressed: () {})
-                        ],
-                      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              child: TabBar(
+                  isScrollable: true,
+                  indicatorColor: Colors.purple,
+                  labelColor: Colors.purple,
+                  tabs: [
+                    Tab(text: "About"),
+                    Tab(text: "Rooms"),
+                    Tab(text: "Facilities"),
+                    Tab(text: "Reviews"),
+                  ]),
+            ),
+            Container(
+              //Add this to give height
+              height: MediaQuery.of(context).size.height,
+              child: TabBarView(children: [
+                Column(
+                  children: [
+                    const SizedBox(height: 10.0),
+                    Text(
+                      widget.abt,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w300, fontSize: 14.0),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Card(
-                    elevation: 3.0,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 3,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Container(
-                                  width: 160,
-                                  height: 160,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          fit: BoxFit.fitWidth,
-                                          image: NetworkImage(
-                                              "https://r1imghtlak.mmtcdn.com/256f6ce64fba11e989790242ac110003.jpg")))),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, right: 8, top: 8),
-                                child: Column(
-                                  //crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Twin Room",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text("₹ 4200"),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              color: Colors.purple,
-                              textColor: Colors.white,
-                              child: Text(
-                                "Select",
-                                style: TextStyle(fontWeight: FontWeight.normal),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16.0,
-                                horizontal: 32.0,
-                              ),
-                              onPressed: () {})
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20.0),
-                  Text(
-                    "HEALTH AND WELLNESS",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 14.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "Gym",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "First-aid Services",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "Actvity Center",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20.0),
-                  Text(
-                    "HEALTH AND WELLNESS",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 14.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "Gym",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "First-aid Services",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "Actvity Center",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20.0),
-                  Text(
-                    "HEALTH AND WELLNESS",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 14.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "Gym",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "First-aid Services",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10.0),
-                  Row(
-                    children: [
-                      Icon(Icons.check),
-                      Text(
-                        "Actvity Center",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 14.0),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Card(
-                    elevation: 3.0,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CircleAvatar(
-                            radius: 35,
-                            backgroundImage: NetworkImage(
-                                "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8d29tYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              //crossAxisAlignment: CrossAxisAlignment.center,
+                  ],
+                ),
+                Container(
+                    // height: 500,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("hotels")
+                            .doc(widget.hotelid)
+                            .collection("rooms")
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (!snapshot.hasData) {
+                            return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("Nice Hotel",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
                                 SizedBox(
-                                  height: 4,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.40,
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "' Excellent Service '",
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  ],
-                                )
+                                CircularProgressIndicator()
                               ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                            );
+                          } else {
+                            return ListView.builder(
+                              shrinkWrap: true,
+
+                              //physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollablePhysics(),
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot room =
+                                    snapshot.data.docs[index];
+
+                                // print(names);
+
+                                return roomtile(
+                                    room["room_name"],
+                                    room["room_img_url"],
+                                    room["room_price"],
+                                    room["room_offer_price"]);
+                              },
+                            );
+                          }
+                        })),
+                Container(
+                    // height: 500,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("hotels")
+                            .doc(widget.hotelid)
+                            .collection("facilities")
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (!snapshot.hasData) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.40,
+                                ),
+                                CircularProgressIndicator()
+                              ],
+                            );
+                          } else {
+                            return ListView.builder(
+                              shrinkWrap: true,
+
+                              //physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollablePhysics(),
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot facility =
+                                    snapshot.data.docs[index];
+
+                                if (facility['available'] == true) {
+                                  return Text(
+                                    "* " + facility.id,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            );
+                          }
+                        })),
+                Container(
+                    // height: 500,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("hotels")
+                            .doc(widget.hotelid)
+                            .collection("reviews")
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (!snapshot.hasData) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.40,
+                                ),
+                                CircularProgressIndicator()
+                              ],
+                            );
+                          } else {
+                            return ListView.builder(
+                              shrinkWrap: true,
+
+                              //physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollablePhysics(),
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot review =
+                                    snapshot.data.docs[index];
+                                return reviewtile(
+                                  review['user_name'],
+                                  review['user_img'],
+                                  review['review_comment'],
+                                );
+                              },
+                            );
+                          }
+                        })),
+              ]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget reviewtile(String name, String img, String review) {
+    return Card(
+      elevation: 3.0,
+      child: Container(
+        height: MediaQuery.of(context).size.height / 5,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            CircleAvatar(
+              radius: 35,
+              backgroundImage: NetworkImage(img),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(
-                    height: 10,
+                    height: 4,
                   ),
-                  Card(
-                    elevation: 3.0,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Row(
+                    children: [
+                      Text(
+                        "' " + review + " '",
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget roomtile(String name, String img, String price, String offerprice) {
+    return Card(
+      elevation: 3.0,
+      child: Container(
+        height: MediaQuery.of(context).size.height / 3,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fitWidth, image: NetworkImage(img)))),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8, top: 8),
+                  child: Column(
+                    //crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
                         children: [
-                          CircleAvatar(
-                            radius: 35,
-                            backgroundImage: NetworkImage(
-                                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8d29tYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              //crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Awesome",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Row(
+                          price == offerprice
+                              ? Text("₹ " + price)
+                              : Row(
                                   children: [
                                     Text(
-                                      "' Excellent Service '",
+                                      "₹ " + price + " ",
                                       style: TextStyle(
-                                          fontStyle: FontStyle.italic),
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: 10,
+                                          decoration:
+                                              TextDecoration.lineThrough),
                                     ),
+                                    Text("₹ " + offerprice)
                                   ],
-                                )
-                              ],
-                            ),
-                          )
+                                ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              )
-            ]),
-          ),
-        ],
+                )
+              ],
+            ),
+            RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                color: Colors.purple,
+                textColor: Colors.white,
+                child: Text(
+                  "Select",
+                  style: TextStyle(fontWeight: FontWeight.normal),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 32.0,
+                ),
+                onPressed: () {})
+          ],
+        ),
       ),
     );
   }
