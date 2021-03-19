@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DeliveryConfirm extends StatefulWidget {
+  final String vendortag;
+  final int amt;
+  final int items;
+
+  DeliveryConfirm({this.vendortag, this.amt, this.items});
   @override
   _DeliveryConfirmState createState() => _DeliveryConfirmState();
 }
@@ -17,6 +23,20 @@ class _DeliveryConfirmState extends State<DeliveryConfirm> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void placeorder() {
+    FirebaseFirestore.instance.collection("orders").add({
+      "add1": _add1Controller.text,
+      "add2": _add2Controller.text,
+      "landmark": _landmarkController.text,
+      "city": _cityController.text,
+      "user_phone": _mobileNumberController.text,
+      "pincode": _pincodeNumberController.text,
+      "user_name": "Bhoomika",
+      "vendor": widget.vendortag,
+      "user_id": "Bhoomika12345"
+    }).then((value) => {print("added")});
   }
 
   @override
@@ -106,7 +126,9 @@ class _DeliveryConfirmState extends State<DeliveryConfirm> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      placeorder();
+                    },
                     color: Colors.green,
                     textColor: Colors.white,
                     child: Text("Confirm Order"),

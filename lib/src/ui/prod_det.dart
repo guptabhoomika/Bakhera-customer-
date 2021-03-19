@@ -1,5 +1,6 @@
 import '../ui/ProdList.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProdDet extends StatefulWidget {
   final String title;
@@ -14,9 +15,12 @@ class ProdDet extends StatefulWidget {
 }
 
 class _ProdDetState extends State<ProdDet> {
+  int orderitemquan = 1;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
@@ -94,19 +98,26 @@ class _ProdDetState extends State<ProdDet> {
               padding: const EdgeInsets.only(top: 10, left: 20),
               child: Row(
                 children: [
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                      child: Text(
-                        "+",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        orderitemquan++;
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "+",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -114,23 +125,34 @@ class _ProdDetState extends State<ProdDet> {
                     width: 10,
                   ),
                   Text(
-                    "1",
+                    orderitemquan.toString(),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(width: 10),
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                      child: Text(
-                        "-",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (orderitemquan == 1 || orderitemquan < 1) {
+                          print("mai charas hu");
+                        } else {
+                          orderitemquan--;
+                        }
+                      });
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text(
+                          "-",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -139,7 +161,19 @@ class _ProdDetState extends State<ProdDet> {
           Padding(
             padding: const EdgeInsets.only(top: 5, left: 20, right: 40),
             child: RaisedButton(
-              onPressed: () {},
+              onPressed: () {
+                FirebaseFirestore.instance.collection('cart').add({
+                  "prod_name": widget.title,
+                  "prod_max_price": widget.cp,
+                  "prod_price": widget.sp,
+                  "prod_quan": orderitemquan,
+                  "prod_img": widget.url,
+                  "user_id": "Bhoomika12345",
+                  "vendor_tag": widget.tag,
+                  "timestamp": DateTime.now(),
+                  "prod_size": widget.quan
+                }).then((value) => showInSnackBar("Item Added"));
+              },
               color: Colors.orange,
               textColor: Colors.white,
               child: Text("Add to Cart"),
@@ -178,5 +212,10 @@ class _ProdDetState extends State<ProdDet> {
         ],
       ),
     );
+  }
+
+  void showInSnackBar(String value) {
+    _scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text(value)));
   }
 }
