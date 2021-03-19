@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'cafe_det.dart';
 
 class Cafe extends StatefulWidget {
@@ -61,28 +61,55 @@ class _CafeState extends State<Cafe> {
                 ),
               ),
             ),
-            cafetile(
-                "https://b.zmtcdn.com/data/pictures/1/19479221/13eae75769811ad074269de5e8714664.jpeg",
-                "Sarita's Cafe",
-                "300",
-                "10:00 am-7:00 pm",
-                "Model Town"),
-            cafetile(
-                "https://content1.jdmagicbox.com/comp/bareilly/e8/9999px581.x581.180205021023.f9e8/catalogue/waffle-affairs-janak-puri-bareilly-restaurants-9l2hez4hy3-250.jpg",
-                "Waffle Affairs",
-                "200",
-                "10:00 am-7:00 pm",
-                "Model Town"),
-            cafetile("https://i.ytimg.com/vi/cmgxB_EWk18/hqdefault.jpg",
-                "Boston Cafe", "500", "10:00 am-7:00 pm", "Model Town")
+            StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection("cafes").snapshots(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.40,
+                        ),
+                        CircularProgressIndicator()
+                      ],
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      // physics: NeverScrollablePhysics(),
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot cafe = snapshot.data.docs[index];
+
+                        // print(names);
+
+                        return cafetile(
+                            cafe["cafe_img_url"],
+                            cafe["cafe_name"],
+                            cafe["cafe_cost"],
+                            cafe["cafe_time"],
+                            cafe["cafe_loc"],
+                            cafe.id,
+                            cafe["cafe_ppl"],
+                            cafe["cafe_about"],
+                            cafe["cafe_menu_url"]);
+                      },
+                    );
+                  }
+                }),
           ],
         ),
       ),
     );
   }
 
-  Widget cafetile(
-      String img, String name, String price, String time, String loc) {
+  Widget cafetile(String img, String name, String price, String time,
+      String loc, String id, String ppl, String abt, String menuurl) {
     return Padding(
       padding: const EdgeInsets.only(top: 5),
       child: GestureDetector(
@@ -96,6 +123,10 @@ class _CafeState extends State<Cafe> {
                         loc: loc,
                         price: price,
                         time: time,
+                        abt: abt,
+                        menu: menuurl,
+                        ppl: ppl,
+                        id: id,
                       )));
         },
         child: ClipRRect(
@@ -140,7 +171,7 @@ class _CafeState extends State<Cafe> {
                               fontWeight: FontWeight.bold, fontSize: 17),
                         ),
                         Text(
-                          "For 2 people",
+                          "For " + ppl + " people",
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                       ],

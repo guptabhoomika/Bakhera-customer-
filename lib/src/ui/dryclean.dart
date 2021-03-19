@@ -84,8 +84,8 @@ class _DryCleanState extends State<DryClean> {
                         itemCount: snapshot.data.docs.length,
                         itemBuilder: (context, index) {
                           DocumentSnapshot hotel = snapshot.data.docs[index];
-                          return drycleantile(
-                              hotel["name"], hotel["Img"], hotel["time"]);
+                          return drycleantile(hotel["name"], hotel["Img"],
+                              hotel["time"], hotel.id, hotel["loc"]);
                         },
                       );
                     }
@@ -99,7 +99,9 @@ class _DryCleanState extends State<DryClean> {
     );
   }
 
-  Widget drycleantile(String name, String img, String time) {
+  Widget drycleantile(
+      String name, String img, String time, String id, String loc) {
+    print(loc);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -111,6 +113,8 @@ class _DryCleanState extends State<DryClean> {
                         title: name,
                         img: img,
                         time: time,
+                        id: id,
+                        loc: loc,
                       )));
         },
         child: Card(

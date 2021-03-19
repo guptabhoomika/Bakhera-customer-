@@ -1,17 +1,16 @@
-import 'package:Service/src/ui/cartpg.dart';
-
-import '../ui/storepg.dart';
 import 'package:flutter/material.dart';
+import '../ui/cartpg.dart';
+import '../ui/dryclean_det.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class VendorList extends StatefulWidget {
-  final String title;
-  VendorList({this.title});
+class AllDryCleanService extends StatefulWidget {
+  final String id;
+  AllDryCleanService({this.id});
   @override
-  _VendorListState createState() => _VendorListState();
+  _AllDryCleanServiceState createState() => _AllDryCleanServiceState();
 }
 
-class _VendorListState extends State<VendorList> {
+class _AllDryCleanServiceState extends State<AllDryCleanService> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +18,7 @@ class _VendorListState extends State<VendorList> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          widget.title,
+          "Services",
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
@@ -27,13 +26,13 @@ class _VendorListState extends State<VendorList> {
             Icons.location_on,
             size: 20,
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => CartPg()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => CartPg()));
+              },
               child: Icon(
                 Icons.shopping_cart,
                 size: 20,
@@ -65,7 +64,7 @@ class _VendorListState extends State<VendorList> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            'Search for Stores',
+                            'Search for Services',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),
@@ -75,12 +74,15 @@ class _VendorListState extends State<VendorList> {
                 ),
               ),
             ),
+
             SizedBox(
               height: 5,
             ),
             StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection("vendors")
+                    .collection("drycleanservice")
+                    .doc(widget.id)
+                    .collection("Services")
                     .snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -102,77 +104,24 @@ class _VendorListState extends State<VendorList> {
                       // physics: NeverScrollablePhysics(),
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) {
-                        DocumentSnapshot vendor = snapshot.data.docs[index];
+                        DocumentSnapshot service = snapshot.data.docs[index];
 
                         // print(names);
 
-                        return storetile(
-                            vendor["title"],
-                            vendor["vendor_img_url"],
-                            vendor["vendor_tag"],
-                            vendor.id,
-                            vendor["vendor_city"]);
+                        return drycleanservice(
+                            service["service_name"],
+                            service["service_cost"],
+                            service["service_clothes"],
+                            service["service_img_url"],
+                            service["service_duration"],
+                            widget.id,
+                            context);
                       },
                     );
                   }
                 }),
+            //Fifthlist(),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget storetile(String name, String img, String tag, String id, String loc) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => StorePg(
-                        title: name,
-                        img: img,
-                        loc: loc,
-                        tag: tag,
-                      )));
-        },
-        child: Card(
-          elevation: 3.0,
-          child: Container(
-            height: MediaQuery.of(context).size.height / 5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            fit: BoxFit.fitWidth, image: NetworkImage(img)))),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(name.toUpperCase(),
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        height: 2,
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.timer),
-                          Text("Open Now"),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
         ),
       ),
     );

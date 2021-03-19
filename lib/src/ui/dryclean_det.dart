@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../ui/enquire.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'ProdList.dart';
+import '../ui/alldrycleanservices.dart';
 
 class DryCleanDet extends StatefulWidget {
   final String title;
   final String img;
+  final String id;
   final String time;
-  DryCleanDet({this.title, this.img, this.time});
+  final String loc;
+  DryCleanDet({this.title, this.img, this.time, this.id, this.loc});
   @override
   _DryCleanDetState createState() => _DryCleanDetState();
 }
@@ -103,7 +106,7 @@ class _DryCleanDetState extends State<DryCleanDet> {
                                 Row(
                                   children: [
                                     Icon(Icons.location_on),
-                                    Text("Rajendra Nagar"),
+                                    Text(widget.loc),
                                   ],
                                 )
                               ],
@@ -136,114 +139,153 @@ class _DryCleanDetState extends State<DryCleanDet> {
                     "Our Services",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Text("View All")
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllDryCleanService(
+                                id: widget.id,
+                              ),
+                            ));
+                      },
+                      child: Text("View All"))
                 ],
               ),
             ),
-            drycleanservice(
-                "Service 1",
-                "200",
-                "10",
-                "https://cdn.mos.cms.futurecdn.net/69pduo2duT5n6LuT8dVK4J.jpg",
-                " 3 hrs "),
-            drycleanservice(
-                "Service 2",
-                "300",
-                "20",
-                "https://3.imimg.com/data3/UB/LL/GLADMIN-26935/dry-cleaning-500x500.jpg",
-                " 5 hrs "),
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("drycleanservice")
+                    .doc(widget.id)
+                    .collection("Services")
+                    .snapshots(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.40,
+                        ),
+                        CircularProgressIndicator()
+                      ],
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      // physics: NeverScrollablePhysics(),
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot service = snapshot.data.docs[index];
+
+                        // print(names);
+
+                        return drycleanservice(
+                            service["service_name"],
+                            service["service_cost"],
+                            service["service_clothes"],
+                            service["service_img_url"],
+                            service["service_duration"],
+                            widget.id,
+                            context);
+                      },
+                    );
+                  }
+                }),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget drycleanservice(
-      String name, String price, String quan, String img, String time) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
-        child: Card(
-          elevation: 10.0,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Center(
-                child: Container(
-                  height: 150,
-                  width: MediaQuery.of(context).size.width * 0.70,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.fitWidth, image: NetworkImage(img))),
-                ),
+Widget drycleanservice(String name, String price, String quan, String img,
+    String time, String id, BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(15.0),
+      child: Card(
+        elevation: 10.0,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Center(
+              child: Container(
+                height: 150,
+                width: MediaQuery.of(context).size.width * 0.70,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.fitWidth, image: NetworkImage(img))),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8),
-                  child: Text(
-                    name,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                  ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 8),
+                child: Text(
+                  name,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, right: 16),
-                  child: Column(
-                    children: [
-                      Text(
-                        "₹ " + price,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17),
-                      ),
-                      Text(
-                        "Per " + quan + " clothes",
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
-                    ],
-                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, right: 16),
+                child: Column(
+                  children: [
+                    Text(
+                      "₹ " + price,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                    ),
+                    Text(
+                      "Per " + quan + " clothes",
+                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8, bottom: 8),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.timer,
+                  color: Colors.grey,
+                  size: 15,
+                ),
+                Text(
+                  time,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.grey),
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8, bottom: 8),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.timer,
-                    color: Colors.grey,
-                    size: 15,
-                  ),
-                  Text(
-                    time,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.grey),
-                  ),
-                ],
-              ),
+          ),
+          Center(
+            child: RaisedButton(
+              onPressed: () {},
+              color: Colors.green,
+              textColor: Colors.white,
+              child: Text("Book Now"),
             ),
-            Center(
-              child: RaisedButton(
-                onPressed: () {},
-                color: Colors.green,
-                textColor: Colors.white,
-                child: Text("Book Now"),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            )
-          ]),
-        ),
+          ),
+          SizedBox(
+            height: 10,
+          )
+        ]),
       ),
-    );
-  }
+    ),
+  );
 }

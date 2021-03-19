@@ -346,55 +346,16 @@ class _HotelDetState extends State<HotelDet> {
                                 DocumentSnapshot review =
                                     snapshot.data.docs[index];
                                 return reviewtile(
-                                  review['user_name'],
-                                  review['user_img'],
-                                  review['review_comment'],
-                                );
+                                    review['user_name'],
+                                    review['user_img'],
+                                    review['review_comment'],
+                                    context);
                               },
                             );
                           }
                         })),
               ]),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget reviewtile(String name, String img, String review) {
-    return Card(
-      elevation: 3.0,
-      child: Container(
-        height: MediaQuery.of(context).size.height / 5,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            CircleAvatar(
-              radius: 35,
-              backgroundImage: NetworkImage(img),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "' " + review + " '",
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -470,4 +431,44 @@ class _HotelDetState extends State<HotelDet> {
       ),
     );
   }
+}
+
+Widget reviewtile(
+    String name, String img, String review, BuildContext context) {
+  return Card(
+    elevation: 3.0,
+    child: Container(
+      height: MediaQuery.of(context).size.height / 5,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircleAvatar(
+            radius: 35,
+            backgroundImage: NetworkImage(img),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "' " + review + " '",
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }

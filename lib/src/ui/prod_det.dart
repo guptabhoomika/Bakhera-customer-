@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 class ProdDet extends StatefulWidget {
   final String title;
   final String url;
+  final int sp;
+  final int cp;
+  final String tag;
   final String quan;
-  ProdDet({this.title, this.url, this.quan});
+  ProdDet({this.title, this.url, this.quan, this.cp, this.sp, this.tag});
   @override
   _ProdDetState createState() => _ProdDetState();
 }
@@ -56,15 +59,37 @@ class _ProdDetState extends State<ProdDet> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Text(
-              "₹ 150",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green),
-            ),
-          ),
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Row(children: [
+                widget.cp == widget.sp
+                    ? Text(
+                        "₹ " + widget.cp.toString(),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green),
+                      )
+                    : Row(
+                        children: [
+                          Text(
+                            "₹ " + widget.cp.toString() + " ",
+                            style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontSize: 15,
+                                color: Colors.red,
+                                fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.lineThrough),
+                          ),
+                          Text(
+                            "₹ " + widget.sp.toString(),
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green),
+                          )
+                        ],
+                      ),
+              ])),
           Padding(
               padding: const EdgeInsets.only(top: 10, left: 20),
               child: Row(

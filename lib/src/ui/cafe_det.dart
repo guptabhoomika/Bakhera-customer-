@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../ui/hotel_det.dart';
 
 class CafeDet extends StatefulWidget {
   final String image;
@@ -6,8 +8,20 @@ class CafeDet extends StatefulWidget {
   final String loc;
   final String price;
   final String time;
-
-  CafeDet({this.image, this.name, this.loc, this.price, this.time});
+  final String abt;
+  final String id;
+  final String menu;
+  final String ppl;
+  CafeDet(
+      {this.image,
+      this.name,
+      this.loc,
+      this.price,
+      this.time,
+      this.abt,
+      this.id,
+      this.menu,
+      this.ppl});
   @override
   _CafeDetState createState() => _CafeDetState();
 }
@@ -117,7 +131,7 @@ class _CafeDetState extends State<CafeDet> {
                                     fontSize: 20.0),
                               ),
                               Text(
-                                "for 2 people",
+                                "for " + widget.ppl + " people",
                                 style: TextStyle(
                                     fontSize: 12.0, color: Colors.grey),
                               )
@@ -192,25 +206,11 @@ class _CafeDetState extends State<CafeDet> {
             //Add this to give height
             height: MediaQuery.of(context).size.height,
             child: TabBarView(children: [
-              Column(
+              ListView(
                 children: [
                   const SizedBox(height: 10.0),
                   Text(
-                    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione architecto autem quasi nisi iusto eius ex dolorum velit! Atque, veniam! Atque incidunt laudantium eveniet sint quod harum facere numquam molestias?",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w300, fontSize: 14.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione architecto autem quasi nisi iusto eius ex dolorum velit! Atque, veniam! Atque incidunt laudantium eveniet sint quod harum facere numquam molestias?",
-                    textAlign: TextAlign.justify,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w300, fontSize: 14.0),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione architecto autem quasi nisi iusto eius ex dolorum velit! Atque, veniam! Atque incidunt laudantium eveniet sint quod harum facere numquam molestias?",
+                    widget.abt,
                     textAlign: TextAlign.justify,
                     style:
                         TextStyle(fontWeight: FontWeight.w300, fontSize: 14.0),
@@ -227,99 +227,49 @@ class _CafeDetState extends State<CafeDet> {
                     height: 500,
                     width: MediaQuery.of(context).size.width * 0.90,
                     decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://d4t7t8y8xqo0t.cloudfront.net/resized/1080X/restaurant%2F111117%2Fmenu%2F111117_2.jpg"))),
+                        image:
+                            DecorationImage(image: NetworkImage(widget.menu))),
                   ),
                 ],
               ),
-              Column(
-                children: [
-                  Card(
-                    elevation: 3.0,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CircleAvatar(
-                            radius: 35,
-                            backgroundImage: NetworkImage(
-                                "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8d29tYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              //crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Nice Hotel",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "' Excellent Service '",
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Card(
-                    elevation: 3.0,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CircleAvatar(
-                            radius: 35,
-                            backgroundImage: NetworkImage(
-                                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8d29tYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80"),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              //crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Awesome",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "' Excellent Service '",
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )
+              Container(
+                  // height: 500,
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection("cafes")
+                          .doc(widget.id)
+                          .collection("cafe_reviews")
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.40,
+                              ),
+                              CircularProgressIndicator()
+                            ],
+                          );
+                        } else {
+                          return ListView.builder(
+                            shrinkWrap: true,
+
+                            //physics: NeverScrollableScrollPhysics(),
+                            // physics: NeverScrollablePhysics(),
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot review =
+                                  snapshot.data.docs[index];
+                              return reviewtile(review['name'], review['img'],
+                                  review['review'], context);
+                            },
+                          );
+                        }
+                      })),
             ]),
           ),
         ],

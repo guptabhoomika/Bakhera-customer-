@@ -2,13 +2,15 @@ import 'package:Service/src/ui/cartpg.dart';
 
 import '../ui/enquire.dart';
 import 'package:flutter/material.dart';
-
+import '../ui/viewallprods.dart';
 import 'ProdList.dart';
 
 class StorePg extends StatefulWidget {
   final String title;
   final String img;
-  StorePg({this.title, this.img});
+  final String loc;
+  final String tag;
+  StorePg({this.title, this.img, this.loc, this.tag});
   @override
   _StorePgState createState() => _StorePgState();
 }
@@ -109,7 +111,7 @@ class _StorePgState extends State<StorePg> {
                                 Row(
                                   children: [
                                     Icon(Icons.location_on),
-                                    Text("Rajendra Nagar"),
+                                    Text(widget.loc),
                                   ],
                                 )
                               ],
@@ -142,11 +144,23 @@ class _StorePgState extends State<StorePg> {
                     "Top Products",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Text("View All")
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllProd(
+                                id: widget.tag,
+                              ),
+                            ));
+                      },
+                      child: Text("View All"))
                 ],
               ),
             ),
-            ProdList()
+            ProdList(
+              tag: widget.tag,
+            )
           ],
         ),
       ),
